@@ -17,8 +17,7 @@ Pod::Spec.new do |s|
   s.author       = { "Michelangelo Chasseur" => "chasseurmic@gmail.com" }
   s.social_media_url = "http://twitter.com/chasseurmic"
   s.source       = {
-    :git => "https://github.com/burniejm/TWRDownloadManager.git",
-    :tag => "1.1.1"
+    :git => "https://github.com/burniejm/TWRDownloadManager.git"
   }
 
   s.platform     = :ios, '7.0'
