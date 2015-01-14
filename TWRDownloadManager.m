@@ -210,6 +210,13 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     }
 }
 
+-(void)URLSession:(NSURLSession *)session task:(NSURLSessionTask *)task didCompleteWithError:(NSError *)error{
+    if(error){
+        NSLog(@"URLSession error is %@",[error description]);
+        [self cancelDownloadForUrl:[NSString stringWithFormat:@"%@",task.currentRequest.URL]];
+    }
+}
+
 - (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location {
 //    NSLog(@"Download finisehd!");
     
