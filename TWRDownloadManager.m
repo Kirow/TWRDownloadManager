@@ -7,7 +7,8 @@
 //
 
 #import "TWRDownloadManager.h"
-#import "TWRDownloadObject.h"
+
+NSString *const TWRBackgroundDownloadIdentifier = @"re.touchwa.downloadmanager";
 
 @interface TWRDownloadManager () <NSURLSessionDelegate, NSURLSessionDownloadDelegate>
 
@@ -37,8 +38,12 @@
         self.session = [NSURLSession sessionWithConfiguration:configuration delegate:self delegateQueue:nil];
         
         // Background session
-        NSURLSessionConfiguration *backgroundConfiguration = [NSURLSessionConfiguration backgroundSessionConfiguration:@"re.touchwa.downloadmanager"];
-        
+        NSURLSessionConfiguration *backgroundConfiguration = nil;
+        if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1) {
+            backgroundConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:TWRBackgroundDownloadIdentifier];
+        } else {
+            backgroundConfiguration = [NSURLSessionConfiguration backgroundSessionConfiguration:TWRBackgroundDownloadIdentifier];
+        }
         self.backgroundSession = [NSURLSession sessionWithConfiguration:backgroundConfiguration delegate:self delegateQueue:nil];
         
         self.downloads = [NSMutableDictionary new];
@@ -48,10 +53,8 @@
 
 #pragma mark - Downloading... 
 
-- (void)downloadFileForURL:(NSString *)urlString
-                  withName:(NSString *)fileName
-          inDirectoryNamed:(NSString *)directory
-             progressBlock:(void(^)(CGFloat progress))progressBlock
+- (TWRDownloadObject*)downloadFileForURL:(NSString *)urlString withName:(NSString *)fileName
+          inDirectoryNamed:(NSString *)directory progressBlock:(void(^)(CGFloat progress))progressBlock
              remainingTime:(void(^)(NSUInteger seconds))remainingTimeBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode {
@@ -59,8 +62,9 @@
     if (!fileName) {
         fileName = [urlString lastPathComponent];
     }
-    
+    TWRDownloadObject *downloadObject = nil;
     if (![self fileDownloadCompletedForUrl:urlString]) {
+        downloadObject = self.downloads[urlString];
         NSLog(@"File is downloading!");
     } else if (![self fileExistsWithName:fileName inDirectory:directory]) {
         NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -70,24 +74,23 @@
         } else {
             downloadTask = [self.session downloadTaskWithRequest:request];
         }
-        TWRDownloadObject *downloadObject = [[TWRDownloadObject alloc] initWithDownloadTask:downloadTask progressBlock:progressBlock remainingTime:remainingTimeBlock completionBlock:completionBlock];
+        downloadObject = [[TWRDownloadObject alloc] initWithDownloadTask:downloadTask progressBlock:progressBlock remainingTime:remainingTimeBlock completionBlock:completionBlock];
         downloadObject.startDate = [NSDate date];
         downloadObject.fileName = fileName;
         downloadObject.directoryName = directory;
-        [self.downloads addEntriesFromDictionary:@{urlString:downloadObject}];
+        [self.downloads addEntriesFromDictionary:@{urlString : downloadObject}];
         [downloadTask resume];
     } else {
         NSLog(@"File already exists!");
     }
+    return downloadObject;
 }
 
-- (void)downloadFileForURL:(NSString *)url
-          inDirectoryNamed:(NSString *)directory
-             progressBlock:(void(^)(CGFloat progress))progressBlock
+- (TWRDownloadObject*)downloadFileForURL:(NSString *)url inDirectoryNamed:(NSString *)directory progressBlock:(void(^)(CGFloat progress))progressBlock
              remainingTime:(void(^)(NSUInteger seconds))remainingTimeBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode {
-    [self downloadFileForURL:url
+    return [self downloadFileForURL:url
                     withName:[url lastPathComponent]
             inDirectoryNamed:directory
                progressBlock:progressBlock
@@ -96,12 +99,12 @@
         enableBackgroundMode:backgroundMode];
 }
 
-- (void)downloadFileForURL:(NSString *)url
+- (TWRDownloadObject*)downloadFileForURL:(NSString *)url
              progressBlock:(void(^)(CGFloat progress))progressBlock
              remainingTime:(void(^)(NSUInteger seconds))remainingTimeBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode {
-    [self downloadFileForURL:url
+    return [self downloadFileForURL:url
                     withName:[url lastPathComponent]
             inDirectoryNamed:nil
                progressBlock:progressBlock
@@ -110,13 +113,13 @@
         enableBackgroundMode:backgroundMode];
 }
 
-- (void)downloadFileForURL:(NSString *)urlString
+- (TWRDownloadObject*)downloadFileForURL:(NSString *)urlString
                   withName:(NSString *)fileName
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode {
-    [self downloadFileForURL:urlString
+    return [self downloadFileForURL:urlString
                    withName:fileName
            inDirectoryNamed:directory
               progressBlock:progressBlock
@@ -125,13 +128,13 @@
         enableBackgroundMode:backgroundMode];
 }
 
-- (void)downloadFileForURL:(NSString *)urlString
+- (TWRDownloadObject*)downloadFileForURL:(NSString *)urlString
           inDirectoryNamed:(NSString *)directory
              progressBlock:(void(^)(CGFloat progress))progressBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode {
     // if no file name was provided, use the last path component of the URL as its name
-    [self downloadFileForURL:urlString
+    return [self downloadFileForURL:urlString
                     withName:[urlString lastPathComponent]
             inDirectoryNamed:directory
                progressBlock:progressBlock
@@ -139,7 +142,7 @@
         enableBackgroundMode:backgroundMode];
 }
 
-- (void)downloadFileForURL:(NSString *)urlString
+- (TWRDownloadObject*)downloadFileForURL:(NSString *)urlString
              progressBlock:(void(^)(CGFloat progress))progressBlock
            completionBlock:(void(^)(BOOL completed))completionBlock
       enableBackgroundMode:(BOOL)backgroundMode {
@@ -150,8 +153,8 @@
         enableBackgroundMode:backgroundMode];
 }
 
-- (void)cancelDownloadForUrl:(NSString *)fileIdentifier {
-    TWRDownloadObject *download = [self.downloads objectForKey:fileIdentifier];
+- (TWRDownloadObject*)cancelDownloadForUrl:(NSString *)fileIdentifier {
+    TWRDownloadObject *download = self.downloads[fileIdentifier];
     if (download) {
         [download.downloadTask cancel];
         [self.downloads removeObjectForKey:fileIdentifier];
@@ -163,6 +166,7 @@
         [self cleanTmpDirectory];
         
     }
+    return download;
 }
 
 - (void)cancelAllDownloads {
@@ -186,27 +190,21 @@
 
 #pragma mark - NSURLSession Delegate
 
-- (void)URLSession:(NSURLSession *)session
-      downloadTask:(NSURLSessionDownloadTask *)downloadTask
-      didWriteData:(int64_t)bytesWritten
- totalBytesWritten:(int64_t)totalBytesWritten
-totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
+- (void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask
+      didWriteData:(int64_t)bytesWritten totalBytesWritten:(int64_t)totalBytesWritten
+        totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     NSString *fileIdentifier = downloadTask.originalRequest.URL.absoluteString;
-    TWRDownloadObject *download = [self.downloads objectForKey:fileIdentifier];
+    TWRDownloadObject *download = self.downloads[fileIdentifier];
     if (download.progressBlock) {
         CGFloat progress = (CGFloat)totalBytesWritten / (CGFloat)totalBytesExpectedToWrite;
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            if(download.progressBlock){
-                download.progressBlock(progress);
-            }
-        });
+        if(download.progressBlock){
+            download.progressBlock(progress);
+        }
     }
     
     CGFloat remainingTime = [self remainingTimeForDownload:download bytesTransferred:totalBytesWritten totalBytesExpectedToWrite:totalBytesExpectedToWrite];
     if (download.remainingTimeBlock) {
-        dispatch_async(dispatch_get_main_queue(), ^(void) {
-            download.remainingTimeBlock((NSUInteger)remainingTime);
-        });
+        download.remainingTimeBlock((NSUInteger)remainingTime);
     }
 }
 
@@ -224,7 +222,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     NSURL *destinationLocation;
     
     NSString *fileIdentifier = downloadTask.originalRequest.URL.absoluteString;
-    TWRDownloadObject *download = [self.downloads objectForKey:fileIdentifier];
+    TWRDownloadObject *download = self.downloads[fileIdentifier];
     
     if (download.directoryName) {
         destinationLocation = [[[self cachesDirectoryUrlPath] URLByAppendingPathComponent:download.directoryName] URLByAppendingPathComponent:download.fileName];
@@ -234,9 +232,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     
     // Move downloaded item from tmp directory to te caches directory
     // (not synced with user's iCloud documents)
-    [[NSFileManager defaultManager] moveItemAtURL:location
-                                            toURL:destinationLocation
-                                            error:&error];
+    [[NSFileManager defaultManager] moveItemAtURL:location toURL:destinationLocation error:&error];
     if (error) {
         NSLog(@"ERROR: %@", error);
     }
@@ -265,14 +261,14 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
 
 - (NSURL *)cachesDirectoryUrlPath {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachesDirectory = [paths objectAtIndex:0];
+    NSString *cachesDirectory = paths[0];
     NSURL *cachesDirectoryUrl = [NSURL fileURLWithPath:cachesDirectory];
     return cachesDirectoryUrl;
 }
 
 - (BOOL)fileDownloadCompletedForUrl:(NSString *)fileIdentifier {
     BOOL retValue = YES;
-    TWRDownloadObject *download = [self.downloads objectForKey:fileIdentifier];
+    TWRDownloadObject *download = self.downloads[fileIdentifier];
     if (download) {
         // downloads are removed once they finish
         retValue = NO;
@@ -280,24 +276,18 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     return retValue;
 }
 
-- (BOOL)isFileDownloadingForUrl:(NSString *)fileIdentifier
-              withProgressBlock:(void(^)(CGFloat progress))block {
-    return [self isFileDownloadingForUrl:fileIdentifier
-                       withProgressBlock:block
-                         completionBlock:nil];
+- (TWRDownloadObject*)downloadingForUrl:(NSString *)fileIdentifier withProgressBlock:(TWRDownloadProgressBlock)block {
+    return [self downloadingForUrl:fileIdentifier withProgressBlock:block completionBlock:nil];
 }
 
-- (BOOL)isFileDownloadingForUrl:(NSString *)fileIdentifier
-              withProgressBlock:(void(^)(CGFloat progress))block
-                completionBlock:(void(^)(BOOL completed))completionBlock {
-    BOOL retValue = NO;
-    TWRDownloadObject *download = [self.downloads objectForKey:fileIdentifier];
+- (TWRDownloadObject*)downloadingForUrl:(NSString *)fileIdentifier withProgressBlock:(TWRDownloadProgressBlock)block
+          completionBlock:(TWRDownloadCompletionBlock)completionBlock {
+    TWRDownloadObject *download = self.downloads[fileIdentifier];
     if (download) {
         download.progressBlock = block;
         download.completionBlock = completionBlock;
-        retValue = YES;
     }
-    return retValue;
+    return download;
 }
 
 #pragma mark File existance
@@ -309,7 +299,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
 - (NSString *)localPathForFile:(NSString *)fileIdentifier inDirectory:(NSString *)directoryName {
     NSString *fileName = [fileIdentifier lastPathComponent];
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachesDirectory = [paths objectAtIndex:0];
+    NSString *cachesDirectory = paths[0];
     return [[cachesDirectory stringByAppendingPathComponent:directoryName] stringByAppendingPathComponent:fileName];
 }
 
@@ -326,7 +316,7 @@ totalBytesExpectedToWrite:(int64_t)totalBytesExpectedToWrite {
     BOOL exists = NO;
     
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-    NSString *cachesDirectory = [paths objectAtIndex:0];
+    NSString *cachesDirectory = paths[0];
     
     // if no directory was provided, we look by default in the base cached dir
     if ([[NSFileManager defaultManager] fileExistsAtPath:[[cachesDirectory stringByAppendingPathComponent:directoryName] stringByAppendingPathComponent:fileName]]) {

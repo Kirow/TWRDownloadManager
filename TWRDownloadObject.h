@@ -6,7 +6,10 @@
 //  Copyright (c) 2014 Touchware. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+
+@class TWRDownloadObject;
 
 typedef void(^TWRDownloadRemainingTimeBlock)(NSUInteger seconds);
 typedef void(^TWRDownloadProgressBlock)(CGFloat progress);
@@ -22,6 +25,7 @@ typedef void(^TWRDownloadCompletionBlock)(BOOL completed);
 @property (copy, nonatomic) NSString *fileName;
 @property (copy, nonatomic) NSString *directoryName;
 @property (copy, nonatomic) NSDate *startDate;
+@property (strong, nonatomic) NSError *error;
 
 - (instancetype)initWithDownloadTask:(NSURLSessionDownloadTask *)downloadTask
                        progressBlock:(TWRDownloadProgressBlock)progressBlock

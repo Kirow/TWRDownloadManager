@@ -13,18 +13,10 @@
 		1538CCF319C4F056002C04E6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1538CCF119C4F056002C04E6 /* Main.storyboard */; };
 		1538CCF519C4F056002C04E6 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1538CCF419C4F056002C04E6 /* Images.xcassets */; };
 		1538CCF819C4F056002C04E6 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1538CCF619C4F056002C04E6 /* LaunchScreen.xib */; };
-		1538CD0419C4F057002C04E6 /* BackgroundDownloadTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 1538CD0319C4F057002C04E6 /* BackgroundDownloadTests.m */; };
+		33AC34FB1AD6C8DF00AEF7EC /* TWRDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AC34F81AD6C8DF00AEF7EC /* TWRDownloadManager.m */; };
+		33AC34FC1AD6C8DF00AEF7EC /* TWRDownloadObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AC34FA1AD6C8DF00AEF7EC /* TWRDownloadObject.m */; };
+		B5AD8C53A30B41BFFD3AB338 /* libPods-BackgroundDownload.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 752DEB8E15794F5E823ADAC6 /* libPods-BackgroundDownload.a */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		1538CCFE19C4F057002C04E6 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 1538CCDC19C4F056002C04E6 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 1538CCE319C4F056002C04E6;
-			remoteInfo = BackgroundDownload;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1538CCE419C4F056002C04E6 /* BackgroundDownload.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BackgroundDownload.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -37,10 +29,13 @@
 		1538CCF219C4F056002C04E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1538CCF419C4F056002C04E6 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		1538CCF719C4F056002C04E6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		1538CCFD19C4F057002C04E6 /* BackgroundDownloadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BackgroundDownloadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1538CD0219C4F057002C04E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1538CD0319C4F057002C04E6 /* BackgroundDownloadTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BackgroundDownloadTests.m; sourceTree = "<group>"; };
+		33AC34F71AD6C8DF00AEF7EC /* TWRDownloadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TWRDownloadManager.h; path = ../TWRDownloadManager.h; sourceTree = "<group>"; };
+		33AC34F81AD6C8DF00AEF7EC /* TWRDownloadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TWRDownloadManager.m; path = ../TWRDownloadManager.m; sourceTree = "<group>"; };
+		33AC34F91AD6C8DF00AEF7EC /* TWRDownloadObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TWRDownloadObject.h; path = ../TWRDownloadObject.h; sourceTree = "<group>"; };
+		33AC34FA1AD6C8DF00AEF7EC /* TWRDownloadObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TWRDownloadObject.m; path = ../TWRDownloadObject.m; sourceTree = "<group>"; };
 		752DEB8E15794F5E823ADAC6 /* libPods-BackgroundDownload.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-BackgroundDownload.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		87084B25AE40EDC99606C15A /* Pods-BackgroundDownload.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BackgroundDownload.release.xcconfig"; path = "Pods/Target Support Files/Pods-BackgroundDownload/Pods-BackgroundDownload.release.xcconfig"; sourceTree = "<group>"; };
+		9922B7991473CBE95855E0D2 /* Pods-BackgroundDownload.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BackgroundDownload.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BackgroundDownload/Pods-BackgroundDownload.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,13 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1538CCFA19C4F057002C04E6 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				B5AD8C53A30B41BFFD3AB338 /* libPods-BackgroundDownload.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,10 +53,11 @@
 		1538CCDB19C4F056002C04E6 = {
 			isa = PBXGroup;
 			children = (
+				33AC34F61AD6C8CB00AEF7EC /* TWRDownloadManager */,
 				1538CCE619C4F056002C04E6 /* BackgroundDownload */,
-				1538CD0019C4F057002C04E6 /* BackgroundDownloadTests */,
 				1538CCE519C4F056002C04E6 /* Products */,
 				29DA0BE69ED74FB6BBA3B7B4 /* Frameworks */,
+				EC7A549FE31FED6C26EFF975 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -75,7 +65,6 @@
 			isa = PBXGroup;
 			children = (
 				1538CCE419C4F056002C04E6 /* BackgroundDownload.app */,
-				1538CCFD19C4F057002C04E6 /* BackgroundDownloadTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,29 +93,32 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		1538CD0019C4F057002C04E6 /* BackgroundDownloadTests */ = {
-			isa = PBXGroup;
-			children = (
-				1538CD0319C4F057002C04E6 /* BackgroundDownloadTests.m */,
-				1538CD0119C4F057002C04E6 /* Supporting Files */,
-			);
-			path = BackgroundDownloadTests;
-			sourceTree = "<group>";
-		};
-		1538CD0119C4F057002C04E6 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				1538CD0219C4F057002C04E6 /* Info.plist */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		29DA0BE69ED74FB6BBA3B7B4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				752DEB8E15794F5E823ADAC6 /* libPods-BackgroundDownload.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		33AC34F61AD6C8CB00AEF7EC /* TWRDownloadManager */ = {
+			isa = PBXGroup;
+			children = (
+				33AC34F71AD6C8DF00AEF7EC /* TWRDownloadManager.h */,
+				33AC34F81AD6C8DF00AEF7EC /* TWRDownloadManager.m */,
+				33AC34F91AD6C8DF00AEF7EC /* TWRDownloadObject.h */,
+				33AC34FA1AD6C8DF00AEF7EC /* TWRDownloadObject.m */,
+			);
+			name = TWRDownloadManager;
+			sourceTree = "<group>";
+		};
+		EC7A549FE31FED6C26EFF975 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				9922B7991473CBE95855E0D2 /* Pods-BackgroundDownload.debug.xcconfig */,
+				87084B25AE40EDC99606C15A /* Pods-BackgroundDownload.release.xcconfig */,
+			);
+			name = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,24 +143,6 @@
 			productReference = 1538CCE419C4F056002C04E6 /* BackgroundDownload.app */;
 			productType = "com.apple.product-type.application";
 		};
-		1538CCFC19C4F057002C04E6 /* BackgroundDownloadTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 1538CD0A19C4F057002C04E6 /* Build configuration list for PBXNativeTarget "BackgroundDownloadTests" */;
-			buildPhases = (
-				1538CCF919C4F057002C04E6 /* Sources */,
-				1538CCFA19C4F057002C04E6 /* Frameworks */,
-				1538CCFB19C4F057002C04E6 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				1538CCFF19C4F057002C04E6 /* PBXTargetDependency */,
-			);
-			name = BackgroundDownloadTests;
-			productName = BackgroundDownloadTests;
-			productReference = 1538CCFD19C4F057002C04E6 /* BackgroundDownloadTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -186,10 +160,6 @@
 							};
 						};
 					};
-					1538CCFC19C4F057002C04E6 = {
-						CreatedOnToolsVersion = 6.0;
-						TestTargetID = 1538CCE319C4F056002C04E6;
-					};
 				};
 			};
 			buildConfigurationList = 1538CCDF19C4F056002C04E6 /* Build configuration list for PBXProject "BackgroundDownload" */;
@@ -206,7 +176,6 @@
 			projectRoot = "";
 			targets = (
 				1538CCE319C4F056002C04E6 /* BackgroundDownload */,
-				1538CCFC19C4F057002C04E6 /* BackgroundDownloadTests */,
 			);
 		};
 /* End PBXProject section */
@@ -219,13 +188,6 @@
 				1538CCF319C4F056002C04E6 /* Main.storyboard in Resources */,
 				1538CCF819C4F056002C04E6 /* LaunchScreen.xib in Resources */,
 				1538CCF519C4F056002C04E6 /* Images.xcassets in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1538CCFB19C4F057002C04E6 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,7 +206,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-BackgroundDownload-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BackgroundDownload/Pods-BackgroundDownload-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		87D24A61F99B45BAB31C0C9D /* Check Pods Manifest.lock */ = {
@@ -269,29 +231,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33AC34FC1AD6C8DF00AEF7EC /* TWRDownloadObject.m in Sources */,
 				1538CCF019C4F056002C04E6 /* ViewController.m in Sources */,
 				1538CCED19C4F056002C04E6 /* AppDelegate.m in Sources */,
 				1538CCEA19C4F056002C04E6 /* main.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		1538CCF919C4F057002C04E6 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				1538CD0419C4F057002C04E6 /* BackgroundDownloadTests.m in Sources */,
+				33AC34FB1AD6C8DF00AEF7EC /* TWRDownloadManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		1538CCFF19C4F057002C04E6 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 1538CCE319C4F056002C04E6 /* BackgroundDownload */;
-			targetProxy = 1538CCFE19C4F057002C04E6 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		1538CCF119C4F056002C04E6 /* Main.storyboard */ = {
@@ -391,6 +339,7 @@
 		};
 		1538CD0819C4F057002C04E6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9922B7991473CBE95855E0D2 /* Pods-BackgroundDownload.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = BackgroundDownload/Info.plist;
@@ -401,45 +350,12 @@
 		};
 		1538CD0919C4F057002C04E6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87084B25AE40EDC99606C15A /* Pods-BackgroundDownload.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = BackgroundDownload/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
-		1538CD0B19C4F057002C04E6 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = BackgroundDownloadTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BackgroundDownload.app/BackgroundDownload";
-			};
-			name = Debug;
-		};
-		1538CD0C19C4F057002C04E6 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-				);
-				INFOPLIST_FILE = BackgroundDownloadTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BackgroundDownload.app/BackgroundDownload";
 			};
 			name = Release;
 		};
@@ -460,15 +376,6 @@
 			buildConfigurations = (
 				1538CD0819C4F057002C04E6 /* Debug */,
 				1538CD0919C4F057002C04E6 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		1538CD0A19C4F057002C04E6 /* Build configuration list for PBXNativeTarget "BackgroundDownloadTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				1538CD0B19C4F057002C04E6 /* Debug */,
-				1538CD0C19C4F057002C04E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
