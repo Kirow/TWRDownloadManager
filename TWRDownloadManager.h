@@ -14,6 +14,8 @@ FOUNDATION_EXPORT NSString *const TWRBackgroundDownloadIdentifier;
 
 @property (nonatomic, strong) void(^backgroundTransferCompletionHandler)();
 
+@property (strong, nonatomic) NSMutableDictionary *downloads;
+
 + (instancetype)sharedManager;
 
 - (TWRDownloadObject*)downloadFileForURL:(NSString *)url withName:(NSString *)fileName inDirectoryNamed:(NSString *)directory
@@ -43,9 +45,6 @@ FOUNDATION_EXPORT NSString *const TWRBackgroundDownloadIdentifier;
 - (void)cancelAllDownloads;
 - (TWRDownloadObject*)cancelDownloadForUrl:(NSString *)fileIdentifier;
 
-- (TWRDownloadObject*)downloadingForUrl:(NSString *)url withProgressBlock:(TWRDownloadProgressBlock)block;
-- (TWRDownloadObject*)downloadingForUrl:(NSString *)url withProgressBlock:(TWRDownloadProgressBlock)block completionBlock:(TWRDownloadCompletionBlock)completionBlock;
-
 - (NSString *)localPathForFile:(NSString *)fileIdentifier;
 - (NSString *)localPathForFile:(NSString *)fileIdentifier inDirectory:(NSString *)directoryName;
 
@@ -58,12 +57,5 @@ FOUNDATION_EXPORT NSString *const TWRBackgroundDownloadIdentifier;
 - (BOOL)deleteFileForUrl:(NSString *)urlString inDirectory:(NSString *)directoryName;
 - (BOOL)deleteFileWithName:(NSString *)fileName;
 - (BOOL)deleteFileWithName:(NSString *)fileName inDirectory:(NSString *)directoryName;
-
-/**
- *  This method helps checking which downloads are currently ongoing.
- *
- *  @return an NSArray of NSString with the URLs of the currently downloading files.
- */
-- (NSArray *)currentDownloads;
 
 @end

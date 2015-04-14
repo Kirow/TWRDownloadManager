@@ -14,7 +14,6 @@ NSString *const TWRBackgroundDownloadIdentifier = @"re.touchwa.downloadmanager";
 
 @property (strong, nonatomic) NSURLSession *session;
 @property (strong, nonatomic) NSURLSession *backgroundSession;
-@property (strong, nonatomic) NSMutableDictionary *downloads;
 
 @end
 
@@ -274,20 +273,6 @@ NSString *const TWRBackgroundDownloadIdentifier = @"re.touchwa.downloadmanager";
         retValue = NO;
     }
     return retValue;
-}
-
-- (TWRDownloadObject*)downloadingForUrl:(NSString *)fileIdentifier withProgressBlock:(TWRDownloadProgressBlock)block {
-    return [self downloadingForUrl:fileIdentifier withProgressBlock:block completionBlock:nil];
-}
-
-- (TWRDownloadObject*)downloadingForUrl:(NSString *)fileIdentifier withProgressBlock:(TWRDownloadProgressBlock)block
-          completionBlock:(TWRDownloadCompletionBlock)completionBlock {
-    TWRDownloadObject *download = self.downloads[fileIdentifier];
-    if (download) {
-        download.progressBlock = block;
-        download.completionBlock = completionBlock;
-    }
-    return download;
 }
 
 #pragma mark File existance
